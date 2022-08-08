@@ -21,7 +21,7 @@ jobs:
       - name: Install choco
         uses: crazy-max/ghaction-chocolatey@v2
         with:
-          args: install cmake rust yasm activeperl llvm
+          args: install cmake rust yasm
       
       - name: Checkout sources
         uses: actions/checkout@v2
