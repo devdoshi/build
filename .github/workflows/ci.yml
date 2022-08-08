@@ -21,7 +21,7 @@ jobs:
       - name: Install choco
         uses: crazy-max/ghaction-chocolatey@v2
         with:
-          args: install cmake rust yasm
+          args: install cmake rust yasm openssl
       
       - name: Checkout sources
         uses: actions/checkout@v2
