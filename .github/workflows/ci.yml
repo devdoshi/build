@@ -13,39 +13,20 @@ jobs:
       matrix:
         include:
           - arch: x86_64-pc-windows-gnu
-            os: ubuntu-latest
+            os: windows-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
     steps:
-
-      - name: Install dependencies
-        if: ${{ contains(matrix.os, 'ubuntu') }}
-        run: |
-          sudo apt-get -y update
-          sudo apt-get -y install llvm
-          sudo apt-get -y install cmake
-          sudo apt-get -y install clang-11
-          sudo apt-get -y install binutils
-          sudo apt-get -y install mingw-w64
-          sudo apt-get -y install g++-aarch64-linux-gnu
-          sudo apt-get -y install gcc-aarch64-linux-gnu
-          sudo apt-get -y install musl-tools qemu-user libc6-dev-arm64-cross
-
+    
+      - name: Install choco
+        uses: crazy-max/ghaction-chocolatey@v2
+        with:
+          args: install cmake rust yasm activeperl llvm
+      
       - name: Checkout sources
         uses: actions/checkout@v2
         with:
           repository: 'surrealdb/surrealdb'
-
-      - name: Cache cargo assets
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ matrix.arch }}-build-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
@@ -68,19 +49,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AMAZON_SECRET_KEY }}
 
       - name: Package binaries
-        if: ${{ !contains(matrix.arch, 'windows') }}
-        shell: bash
-        run: |
-          cd target/${{ matrix.arch }}/release
-          chmod +x surreal
-          tar -zcvf ${{ matrix.file }}.tgz surreal
-          echo $(shasum -a 256 ${{ matrix.file }}.tgz | cut -f1 -d' ') > ${{ matrix.file }}.txt
-          aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.tgz s3://download.surrealdb.com/${{ github.ref_name }}/
-          aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.txt s3://download.surrealdb.com/${{ github.ref_name }}/
-          cd -
-
-      - name: Package binaries
-        if: ${{ contains(matrix.arch, 'windows') }}
         shell: bash
         run: |
           cd target/${{ matrix.arch }}/release
