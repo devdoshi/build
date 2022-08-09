@@ -18,7 +18,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
         
-      - name: Install choco
+      - name: Install chocolatey
         if: ${{ contains(matrix.os, 'windows') }}
         uses: crazy-max/ghaction-chocolatey@v2
         with:
