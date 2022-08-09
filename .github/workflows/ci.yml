@@ -16,9 +16,6 @@ jobs:
             os: windows-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: msys2 {0}
     env:
       OPENSSL_DIR: 'C:\Tools\vcpkg\installed\x64-windows-static'
       OPENSSL_STATIC: 'Yes'
