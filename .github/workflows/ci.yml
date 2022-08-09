@@ -25,15 +25,18 @@ jobs:
         if: ${{ contains(matrix.os, 'windows') }}
         uses: crazy-max/ghaction-chocolatey@v2
         with:
-          args: install pacman pkgconfiglite
+          args: install pacman openssl pkgconfiglite
 
       # - name: Install dependencies
       #   if: ${{ contains(matrix.os, 'windows') }}
-      #   run: pacman -S openssl openssl-devel pkg-config
+        # run: pacman -S pkg-config openssl openssl-devel mingw-w64-x86_64-openssl
     
       - run: set VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT
       - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
-      - run: vcpkg install openssl:x64-windows-static-md      
+      - run: set OPENSSL_DIR=C:/vcpkg/packages/openssl_x64-windows-static-md/debug
+      - run: vcpkg install openssl:x64-windows-static-md
+      - run: set VCPKGRS_DYNAMIC=1
+      - run: ls -l $OPENSSL_DIR
       
       - name: Checkout sources
         uses: actions/checkout@v2
