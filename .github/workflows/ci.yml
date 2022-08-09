@@ -20,14 +20,16 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-          
-      - uses: msys2/setup-msys2@v1
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+        
+      - name: Install choco
+        uses: crazy-max/ghaction-chocolatey@v2
         with:
-          msystem: MSYSTEM
-          install: git base-devel msys2-devel cmake clang perl openssl yasm zlib
-          update: true
+          args: install cmake llvm openssl yasm
+      
+      - name: Setup perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          distribution: strawberry
       
       - name: Checkout sources
         uses: actions/checkout@v2
