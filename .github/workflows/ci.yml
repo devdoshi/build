@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - arch: x86_64-pc-windows-msvc
+          - arch: x86_64-pc-windows-gnu
             os: windows-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
@@ -28,6 +28,13 @@ jobs:
           
       - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
       - run: vcpkg install openssl:x64-windows-static-md
+      - run: ls $VCPKG_ROOT
+      - run: ls $OPENSSL_DIR
+      
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.32'
+          distribution: strawberry
       
       - name: Checkout sources
         uses: actions/checkout@v2
