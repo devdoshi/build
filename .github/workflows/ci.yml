@@ -16,7 +16,7 @@ jobs:
             os: windows-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
-    env:
+    # env:
       # OPENSSL_STATIC: true
       # OPENSSL_NO_VENDOR: false
     steps:
