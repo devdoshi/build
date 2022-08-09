@@ -29,14 +29,7 @@ jobs:
         run: |
           vcpkg integrate install
           vcpkg install openssl:x64-windows-static
-          
-        env:
-          OPENSSL_STATIC: true
-          OPENSSL_NO_VENDOR: true
-          OPENSSL_DIR: C:\vcpkg\packages\openssl_x64-windows-static
-          OPENSSL_LIB_DIR: C:\vcpkg\packages\openssl_x64-windows-static\lib
-          OPENSSL_INCLUDE_DIR: C:\vcpkg\packages\openssl_x64-windows-static\include
-      
+                
       - name: Checkout sources
         uses: actions/checkout@v2
         with:
@@ -51,10 +44,16 @@ jobs:
 
       - name: Run cargo build
         uses: actions-rs/cargo@v1
+        env:
+          OPENSSL_STATIC: true
+          OPENSSL_NO_VENDOR: true
+          OPENSSL_DIR: C:\vcpkg\packages\openssl_x64-windows-static
+          OPENSSL_LIB_DIR: C:\vcpkg\packages\openssl_x64-windows-static\lib
+          OPENSSL_INCLUDE_DIR: C:\vcpkg\packages\openssl_x64-windows-static\include
         with:
           command: build
           args: --release --locked --target ${{ matrix.arch }}
-
+      
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
