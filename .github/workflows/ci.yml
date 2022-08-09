@@ -21,10 +21,10 @@ jobs:
       OPENSSL_NO_VENDOR: true
     steps:
         
-      # - name: Install choco
-      #   uses: crazy-max/ghaction-chocolatey@v2
-      #   with:
-      #     args: install cmake yasm
+      - name: Install choco
+        uses: crazy-max/ghaction-chocolatey@v2
+        with:
+          args: install pacman
       # 
       # - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
       # - run: vcpkg install openssl:x64-windows-static-md
