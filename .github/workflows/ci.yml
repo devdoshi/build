@@ -19,28 +19,27 @@ jobs:
     env:
       OPENSSL_STATIC: true
       OPENSSL_NO_VENDOR: true
+      VCPKGRS_DYNAMIC: true
     steps:
         
       - name: Install choco
         if: ${{ contains(matrix.os, 'windows') }}
         uses: crazy-max/ghaction-chocolatey@v2
         with:
-          args: install pacman
-          # args: install pkgconfiglite
+          args: install pkgconfiglite
+
+      # - name: Install dependencies
+      #   if: ${{ contains(matrix.os, 'windows') }}
+      #   run: pacman -S pkg-config openssl openssl-devel mingw-w64-x86_64-openssl
 
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
-        run: pacman -S pkg-config openssl openssl-devel mingw-w64-x86_64-openssl
-    
-      # - run: set VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT
-      # - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
-      # - run: set OPENSSL_DIR=C:/vcpkg/packages/openssl_x64-windows-static-md/debug
-      # - run: set OPENSSL_DIR=C:\Program Files\OpenSSL-Win64\
-      # - run: vcpkg integrate install
-      # - run: vcpkg install openssl:x64-windows-static
-      # - run: set VCPKGRS_DYNAMIC=1
-      - run: refreshenv
-      - run: pacman -Fl pkg-config
+        run: |
+          set VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT
+          echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "OPENSSL_DIR=C:/vcpkg/packages/openssl_x64-windows-static-md/debug" | Out-File -FilePath $env:GITHUB_ENV -Append
+          vcpkg integrate install
+          vcpkg install openssl:x64-windows-static
       
       - name: Checkout sources
         uses: actions/checkout@v2
