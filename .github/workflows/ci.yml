@@ -22,6 +22,8 @@ jobs:
     steps:
           
       - uses: msys2/setup-msys2@v1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
         with:
           msystem: MSYSTEM
           install: git base-devel msys2-devel cmake clang perl openssl yasm zlib
