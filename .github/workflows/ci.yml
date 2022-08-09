@@ -44,7 +44,7 @@ jobs:
           vcpkg integrate install
           vcpkg install openssl:x64-windows-static
           ls
-          cd "$OPENSSL_DIR"
+          cd C:\vcpkg\packages\openssl_x64-windows-static
           ls
       
       - run: exit 1
