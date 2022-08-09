@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - arch: x86_64-pc-windows-gnu
+          - arch: x86_64-pc-windows-msvc
             os: windows-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
