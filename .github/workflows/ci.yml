@@ -16,25 +16,26 @@ jobs:
             os: windows-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
-    env:
-      OPENSSL_STATIC: true
-      OPENSSL_NO_VENDOR: true
-      OPENSSL_DIR: C:\vcpkg\packages\openssl_x64-windows-static
-      OPENSSL_LIB_DIR: C:\vcpkg\packages\openssl_x64-windows-static\lib
-      OPENSSL_INCLUDE_DIR: C:\vcpkg\packages\openssl_x64-windows-static\include
     steps:
         
       - name: Install choco
         if: ${{ contains(matrix.os, 'windows') }}
         uses: crazy-max/ghaction-chocolatey@v2
         with:
-          args: install pkgconfiglite
+          args: install --allow-empty-checksums pkgconfiglite
 
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
         run: |
           vcpkg integrate install
           vcpkg install openssl:x64-windows-static
+          
+        env:
+          OPENSSL_STATIC: true
+          OPENSSL_NO_VENDOR: true
+          OPENSSL_DIR: C:\vcpkg\packages\openssl_x64-windows-static
+          OPENSSL_LIB_DIR: C:\vcpkg\packages\openssl_x64-windows-static\lib
+          OPENSSL_INCLUDE_DIR: C:\vcpkg\packages\openssl_x64-windows-static\include
       
       - name: Checkout sources
         uses: actions/checkout@v2
