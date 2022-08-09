@@ -21,13 +21,14 @@ jobs:
       OPENSSL_NO_VENDOR: true
     steps:
         
-      - name: Install choco
-        uses: crazy-max/ghaction-chocolatey@v2
-        with:
-          args: install cmake yasm
-          
-      - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
-      - run: vcpkg install openssl:x64-windows-static-md
+      # - name: Install choco
+      #   uses: crazy-max/ghaction-chocolatey@v2
+      #   with:
+      #     args: install cmake yasm
+      # 
+      # - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
+      # - run: vcpkg install openssl:x64-windows-static-md
+      - run: pacman -S openssl-devel pkg-config
       
       - uses: shogo82148/actions-setup-perl@v1
         with:
