@@ -31,11 +31,11 @@ jobs:
       #   if: ${{ contains(matrix.os, 'windows') }}
         # run: pacman -S pkg-config openssl openssl-devel mingw-w64-x86_64-openssl
     
-      - run: set VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT
-      - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
-      - run: set OPENSSL_DIR=C:/vcpkg/packages/openssl_x64-windows-static-md/debug
+      # - run: set VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT
+      # - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
+      # - run: set OPENSSL_DIR=C:/vcpkg/packages/openssl_x64-windows-static-md/debug
       - run: set OPENSSL_DIR=C:\Program Files\OpenSSL-Win64\
-      - run: vcpkg install openssl:x64-windows-static-md
+      # - run: vcpkg install openssl:x64-windows-static-md
       - run: set VCPKGRS_DYNAMIC=1
       
       - name: Checkout sources
