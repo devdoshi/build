@@ -28,8 +28,6 @@ jobs:
       
       - name: Setup perl
         uses: shogo82148/actions-setup-perl@v1
-        with:
-          distribution: strawberry
       
       - name: Checkout sources
         uses: actions/checkout@v2
