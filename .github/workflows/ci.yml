@@ -15,7 +15,7 @@ jobs:
           - arch: x86_64-pc-windows-gnu
             os: windows-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
-    runs-on: ${{ matrix.os 
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         shell: msys2 {0}
