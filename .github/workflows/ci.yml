@@ -18,7 +18,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       OPENSSL_STATIC: true
-      OPENSSL_NO_VENDOR: false
+      OPENSSL_NO_VENDOR: true
     steps:
         
       - name: Install choco
@@ -36,9 +36,11 @@ jobs:
       # - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
       # - run: set OPENSSL_DIR=C:/vcpkg/packages/openssl_x64-windows-static-md/debug
       # - run: set OPENSSL_DIR=C:\Program Files\OpenSSL-Win64\
-      # - run: vcpkg install openssl:x64-windows-static-md
+      # - run: vcpkg integrate install
+      # - run: vcpkg install openssl:x64-windows-static
       # - run: set VCPKGRS_DYNAMIC=1
       - run: refreshenv
+      - run: pacman -Fl pkg-config
       
       - name: Checkout sources
         uses: actions/checkout@v2
