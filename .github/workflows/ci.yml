@@ -21,11 +21,11 @@ jobs:
       OPENSSL_NO_VENDOR: false
     steps:
         
-      # - name: Install choco
-      #   if: ${{ contains(matrix.os, 'windows') }}
-      #   uses: crazy-max/ghaction-chocolatey@v2
-      #   with:
-      #     args: install pacman pkgconfiglite
+      - name: Install choco
+        if: ${{ contains(matrix.os, 'windows') }}
+        uses: crazy-max/ghaction-chocolatey@v2
+        with:
+          args: install pacman pkgconfiglite
 
       # - name: Install dependencies
       #   if: ${{ contains(matrix.os, 'windows') }}
