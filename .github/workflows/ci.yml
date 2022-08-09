@@ -29,6 +29,7 @@ jobs:
         with:
           args: install cmake yasm
           
+      - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
       - run: vcpkg install openssl:x64-windows-static-md
       
       - name: Checkout sources
