@@ -17,8 +17,8 @@ jobs:
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
     env:
-      OPENSSL_DIR: 'C:\Tools\vcpkg\installed\x64-windows-static'
-      OPENSSL_STATIC: 'Yes'
+      OPENSSL_STATIC: true
+      OPENSSL_NO_VENDOR: true
     steps:
         
       - name: Install choco
@@ -28,8 +28,6 @@ jobs:
           
       - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
       - run: vcpkg install openssl:x64-windows-static-md
-      - run: ls $VCPKG_ROOT
-      - run: ls $OPENSSL_DIR
       
       - uses: shogo82148/actions-setup-perl@v1
         with:
