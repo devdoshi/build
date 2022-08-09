@@ -36,10 +36,13 @@ jobs:
         if: ${{ contains(matrix.os, 'windows') }}
         run: |
           set VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT
+          cd $env:VCPKG_INSTALLATION_ROOT
+          ls -l
           echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
-          echo "OPENSSL_DIR=C:/vcpkg/packages/openssl_x64-windows-static-md/debug" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "OPENSSL_DIR=C:/vcpkg/packages/openssl_x64-windows-static/debug" | Out-File -FilePath $env:GITHUB_ENV -Append
           vcpkg integrate install
           vcpkg install openssl:x64-windows-static
+          ls -l
       
       - name: Checkout sources
         uses: actions/checkout@v2
