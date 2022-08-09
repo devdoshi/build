@@ -39,8 +39,6 @@ jobs:
       # - run: vcpkg install openssl:x64-windows-static-md
       # - run: set VCPKGRS_DYNAMIC=1
       - run: refreshenv
-      - run: openssl version
-      - run: pkg-config
       
       - name: Checkout sources
         uses: actions/checkout@v2
