@@ -30,6 +30,10 @@ jobs:
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
         run: pacman -S openssl openssl-devel pkg-config
+        
+      - run: vcpkg install openssl:x64-windows
+      
+      # - run: set VCPKG_ROOT=c:\path\to\vcpkg\installation
       
       - name: Checkout sources
         uses: actions/checkout@v2
