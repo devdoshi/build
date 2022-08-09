@@ -17,23 +17,19 @@ jobs:
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
     env:
-      OPENSSL_STATIC: true
-      OPENSSL_NO_VENDOR: true
+      # OPENSSL_STATIC: true
+      # OPENSSL_NO_VENDOR: false
     steps:
         
       - name: Install choco
+        if: ${{ contains(matrix.os, 'windows') }}
         uses: crazy-max/ghaction-chocolatey@v2
         with:
           args: install pacman
-      # 
-      # - run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
-      # - run: vcpkg install openssl:x64-windows-static-md
-      - run: pacman -S openssl-devel pkg-config
-      
-      - uses: shogo82148/actions-setup-perl@v1
-        with:
-          perl-version: '5.32'
-          distribution: strawberry
+
+      - name: Install dependencies
+        if: ${{ contains(matrix.os, 'windows') }}
+        run: pacman -S openssl openssl-devel pkg-config
       
       - name: Checkout sources
         uses: actions/checkout@v2
