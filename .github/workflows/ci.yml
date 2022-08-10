@@ -35,7 +35,7 @@ jobs:
       
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
-        run: pacman --noconfirm -S pkg-config mingw-w64-x86_64-grpc mingw-w64-x86_64-openssl
+        run: pacman --noconfirm -S pkg-config mingw-w64-x86_64-cmake mingw-w64-x86_64-openssl
 
       - name: Checkout sources
         uses: actions/checkout@v2
