@@ -17,7 +17,12 @@ jobs:
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
     steps:
-                    
+
+      - name: Checkout sources
+        uses: actions/checkout@v2
+        with:
+          repository: 'surrealdb/surrealdb'
+          
       - name: Cache environment
         uses: pat-s/always-upload-cache@v3.0.1
         with:
@@ -27,7 +32,7 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ matrix.arch }}-build-cargo-test
+          key: ${{ matrix.arch }}-build-cargo-temp
 
       - name: Set environment path
         if: ${{ contains(matrix.os, 'windows') }}
@@ -36,11 +41,6 @@ jobs:
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
         run: pacman --noconfirm -S cmake binutils yasm mingw-w64-x86_64-openssl
-
-      - name: Checkout sources
-        uses: actions/checkout@v2
-        with:
-          repository: 'surrealdb/surrealdb'
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
