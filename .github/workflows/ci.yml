@@ -17,7 +17,19 @@ jobs:
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
     steps:
-        
+
+      - name: Cache cargo assets
+        uses: pat-s/always-upload-cache@v3.0.1
+        with:
+          path: |
+            /vcpkg/packages
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ matrix.arch }}-build-cargo-${{ hashFiles('**/Cargo.lock') }}
+          
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
         run: |
@@ -25,6 +37,12 @@ jobs:
           vcpkg install openssl:x64-windows-static
           vcpkg install openssl:x64-windows-static-md
           choco install --allow-empty-checksums pkgconfiglite
+          cd C:\vcpkg\packages\openssl_x64-windows-static
+          ls
+          cd C:\vcpkg\packages\openssl_x64-windows-static\lib
+          ls
+          cd C:\vcpkg\packages\openssl_x64-windows-static\include
+          ls
                 
       - name: Checkout sources
         uses: actions/checkout@v2
@@ -42,11 +60,11 @@ jobs:
         uses: actions-rs/cargo@v1
         env:
           VCPKGRS_DYNAMIC: 1
-          # OPENSSL_STATIC: true
-          OPENSSL_NO_VENDOR: true
-          OPENSSL_DIR: C:\vcpkg\packages\openssl_x64-windows-static-md
-          # OPENSSL_LIB_DIR: C:\vcpkg\packages\openssl_x64-windows-static-md\lib
-          # OPENSSL_INCLUDE_DIR: C:\vcpkg\packages\openssl_x64-windows-static-md\include
+          OPENSSL_STATIC: true
+          X86_64_PC_WINDOWS_GNU_OPENSSL_NO_VENDOR: true
+          X86_64_PC_WINDOWS_GNU_OPENSSL_DIR: C:\vcpkg\packages\openssl_x64-windows-static
+          # X86_64_PC_WINDOWS_GNU_OPENSSL_LIB_DIR: C:\vcpkg\packages\openssl_x64-windows-static-md\lib
+          # X86_64_PC_WINDOWS_GNU_OPENSSL_INCLUDE_DIR: C:\vcpkg\packages\openssl_x64-windows-static-md\include
         with:
           command: build
           args: --release --locked --target ${{ matrix.arch }}
