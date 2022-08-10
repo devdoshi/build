@@ -33,12 +33,34 @@ jobs:
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
         run: |
+          cd C:\vcpkg\installed
+          ls
+          cd C:\vcpkg\installed\x64-windows
+          ls
+          cd C:\vcpkg\installed\x64-windows-static
+          ls
+          cd C:\vcpkg\installed\x64-windows-static\lib
+          ls
+          cd C:\vcpkg\installed\x64-windows-static\include
+          ls
+          cd C:\vcpkg\packages\openssl_x64-windows-static
+          ls
+          cd C:\vcpkg\packages\openssl_x64-windows-static\lib
+          ls
+          cd C:\vcpkg\packages\openssl_x64-windows-static\include
+          ls
           vcpkg integrate install
           vcpkg install openssl:x64-windows-static
           choco install --allow-empty-checksums pkgconfiglite
           cd C:\vcpkg\installed
           ls
+          cd C:\vcpkg\installed\x64-windows
+          ls
           cd C:\vcpkg\installed\x64-windows-static
+          ls
+          cd C:\vcpkg\installed\x64-windows-static\lib
+          ls
+          cd C:\vcpkg\installed\x64-windows-static\include
           ls
           cd C:\vcpkg\packages\openssl_x64-windows-static
           ls
