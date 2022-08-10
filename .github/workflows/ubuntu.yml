@@ -1,0 +1,77 @@
+name: Continuous integration
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  build:
+    name: Build ${{ matrix.arch }}
+    strategy:
+      matrix:
+        include:
+          - arch: x86_64-pc-windows-gnu
+            os: ubuntu-latest
+            file: surreal-${{ github.ref_name }}.windows-amd64
+    runs-on: ${{ matrix.os }}
+    steps:
+
+      - name: Checkout sources
+        uses: actions/checkout@v2
+        with:
+          repository: 'surrealdb/surrealdb'
+
+      - name: Install dependencies
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        run: |
+          sudo apt-get -y update
+          sudo apt-get -y install pacman
+          sudo apt-get -y install llvm cmake clang-11 binutils mingw-w64
+          sudo apt-get -y install musl-tools qemu-user libc6-dev-arm64-cross
+          sudo apt-get -y install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
+          pacman -S pkg-config openssl
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          target: ${{ matrix.arch }}
+          
+      - name: Output package versions
+        run: go version ; cargo version ; rustc --version ; cmake --version ; gcc --version ; g++ --version ; perl -V
+
+      - name: Run cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --locked --target ${{ matrix.arch }}
+      
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-2
+          aws-access-key-id: ${{ secrets.AMAZON_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AMAZON_SECRET_KEY }}
+
+      - name: Package binaries
+        shell: bash
+        run: |
+          cd target/${{ matrix.arch }}/release
+          cp surreal.exe ${{ matrix.file }}.exe
+          echo $(shasum -a 256 ${{ matrix.file }}.exe | cut -f1 -d' ') > ${{ matrix.file }}.txt
+          aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.exe s3://download.surrealdb.com/${{ github.ref_name }}/
+          aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.txt s3://download.surrealdb.com/${{ github.ref_name }}/
+          cd -
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.file }}
+          path: |
+            target/${{ matrix.arch }}/release/surreal
+            target/${{ matrix.arch }}/release/${{ matrix.file }}.tgz
+            target/${{ matrix.arch }}/release/${{ matrix.file }}.txt
+            target/${{ matrix.arch }}/release/${{ matrix.file }}.exe
