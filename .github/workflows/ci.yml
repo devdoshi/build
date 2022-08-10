@@ -31,13 +31,11 @@ jobs:
           
       - run: perl -V
 
-      - name: Install dependencies
-        if: ${{ contains(matrix.os, 'windows') }}
-        run: |
-          choco install --allow-empty-checksums strawberryperl
-          
-      - run: perl -V
-                
+      # - name: Install dependencies
+      #   if: ${{ contains(matrix.os, 'windows') }}
+      #   run: |
+      #     choco install --allow-empty-checksums strawberryperl
+                          
       - name: Checkout sources
         uses: actions/checkout@v2
         with:
@@ -52,12 +50,6 @@ jobs:
 
       - name: Run cargo build
         uses: actions-rs/cargo@v1
-        env:
-          OPENSSL_STATIC: true
-          OPENSSL_NO_VENDOR: true
-          OPENSSL_DIR: C:\vcpkg\installed\x64-windows-static
-          OPENSSL_LIB_DIR: C:\vcpkg\installed\x64-windows-static\lib
-          OPENSSL_INCLUDE_DIR: C:\vcpkg\installed\x64-windows-static\include
         with:
           command: build
           args: --release --locked --target ${{ matrix.arch }}
