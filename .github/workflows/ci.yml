@@ -135,13 +135,6 @@ jobs:
       #   if: ${{ contains(matrix.os, 'windows') }}
       #   run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
 
-      # - name: Install dependencies
-      #   if: ${{ contains(matrix.os, 'windows') }}
-      #   uses: msys2/setup-msys2@v2
-      #   with:
-      #     release: false
-      #     install: mingw-w64-x86_64-gcc mingw-w64-i686-gcc
-
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'ubuntu') }}
         run: |
@@ -149,18 +142,20 @@ jobs:
           sudo apt-get -y install musl-tools qemu-user libc6-dev-arm64-cross
           sudo apt-get -y install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
 
-      - name: Setup msys2 toolchains
+      - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
         uses: msys2/setup-msys2@v2
         with:
           release: false
           install: mingw-w64-x86_64-gcc mingw-w64-i686-gcc
 
-      - name: Prepare env for windows
+      - name: Prepare environment
         if: ${{ contains(matrix.os, 'windows') }}
         run: |
           # Add symlinks to the target-specific GNU sysroots for Clang
           New-Item -Path "C:\Program Files\LLVM\x86_64-w64-mingw32" -ItemType SymbolicLink -Value "C:\msys64\mingw64\x86_64-w64-mingw32"
+          # Ensure POSIX-compatible perl is in PATH
+          echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
           # Add paths to GCC executables to PATH
           echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           # Configure CC_<target> environment variables
