@@ -19,24 +19,12 @@ jobs:
     steps:
         
       - run: echo $Env:Path
-      
-      - run: echo $Env:Path
-        env:
-          PATH: C:\msys64\usr\bin\;${GITHUB_PATH}
-    
-      - run: echo $Env:Path
-        env:
-          PATH: C:\msys64\usr\bin\;$Env.Path
           
       - run: echo $Env:Path
         env:
-          PATH: C:\msys64\usr\bin\;${Env.Path}
+          PATH: C:\msys64\usr\bin\;$Env:Path
 
-      - run: echo "C:\msys64\usr\bin;${Env.Path}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
-      
-      - run: echo $Env:Path
-        env:
-          PATH: C:\msys64\usr\bin\;${Env.Path}
+      - run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
 
       - name: Cache cargo assets
         uses: pat-s/always-upload-cache@v3.0.1
