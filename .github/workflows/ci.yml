@@ -35,9 +35,7 @@ jobs:
       
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
-        run: |
-            choco install cmake yasm
-            pacman --noconfirm -S mingw-w64-cmake mingw-w64-binutils mingw-w64-yasm mingw-w64-x86_64-openssl
+        run: pacman --noconfirm -S mingw-w64-cmake mingw-w64-binutils mingw-w64-yasm mingw-w64-x86_64-openssl
 
       - name: Checkout sources
         uses: actions/checkout@v2
