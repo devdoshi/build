@@ -133,9 +133,7 @@ jobs:
 
       - name: Prepare environment
         if: ${{ contains(matrix.os, 'windows') }}
-        run: |
-          echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
-          echo "CC_x86_64_pc_windows_gnu=x86_64-w64-mingw32-gcc" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
 
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'ubuntu') }}
@@ -144,13 +142,6 @@ jobs:
           sudo apt-get -y install musl-tools qemu-user libc6-dev-arm64-cross
           sudo apt-get -y install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
 
-      - name: Install dependencies
-        if: ${{ contains(matrix.os, 'windows') }}
-        uses: msys2/setup-msys2@v2
-        with:
-          release: false
-          install: mingw-w64-x86_64-gcc
-
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -158,8 +149,8 @@ jobs:
           override: true
           target: ${{ matrix.arch }}
 
-      # - name: Output package versions
-      #   run: go version ; cargo version ; rustc --version ; cmake --version ; gcc --version ; g++ --version ; perl -v
+      - name: Output package versions
+        run: go version ; cargo version ; rustc --version ; cmake --version ; gcc --version ; g++ --version ; perl -v
 
       - name: Run cargo build
         uses: actions-rs/cargo@v1
