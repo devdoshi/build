@@ -22,7 +22,6 @@ jobs:
         uses: pat-s/always-upload-cache@v3.0.1
         with:
           path: |
-            /vcpkg/
             ~/.cargo/bin/
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
@@ -30,44 +29,14 @@ jobs:
             target/
           key: ${{ matrix.arch }}-build-cargo-test
           
+      - run: perl -V
+
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
         run: |
-          cd C:\vcpkg\installed
-          ls
-          cd C:\vcpkg\installed\x64-windows
-          ls
-          cd C:\vcpkg\installed\x64-windows-static
-          ls
-          cd C:\vcpkg\installed\x64-windows-static\lib
-          ls
-          cd C:\vcpkg\installed\x64-windows-static\include
-          ls
-          cd C:\vcpkg\packages\openssl_x64-windows-static
-          ls
-          cd C:\vcpkg\packages\openssl_x64-windows-static\lib
-          ls
-          cd C:\vcpkg\packages\openssl_x64-windows-static\include
-          ls
-          vcpkg integrate install
-          vcpkg install openssl:x64-windows-static
-          choco install --allow-empty-checksums pkgconfiglite
-          cd C:\vcpkg\installed
-          ls
-          cd C:\vcpkg\installed\x64-windows
-          ls
-          cd C:\vcpkg\installed\x64-windows-static
-          ls
-          cd C:\vcpkg\installed\x64-windows-static\lib
-          ls
-          cd C:\vcpkg\installed\x64-windows-static\include
-          ls
-          cd C:\vcpkg\packages\openssl_x64-windows-static
-          ls
-          cd C:\vcpkg\packages\openssl_x64-windows-static\lib
-          ls
-          cd C:\vcpkg\packages\openssl_x64-windows-static\include
-          ls
+          choco install --allow-empty-checksums strawberryperl
+          
+      - run: perl -V
                 
       - name: Checkout sources
         uses: actions/checkout@v2
