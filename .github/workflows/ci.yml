@@ -28,14 +28,13 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ matrix.arch }}-build-cargo-
+          key: ${{ matrix.arch }}-build-cargo-test
           
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
         run: |
           vcpkg integrate install
           vcpkg install openssl:x64-windows-static
-          vcpkg install openssl:x64-windows-static-md
           choco install --allow-empty-checksums pkgconfiglite
           cd C:\vcpkg\installed
           ls
