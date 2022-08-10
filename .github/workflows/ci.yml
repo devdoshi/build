@@ -70,7 +70,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --locked --target ${{ matrix.arch }}
+          args: --release --locked
       
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1
