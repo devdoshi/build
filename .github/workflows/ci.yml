@@ -108,10 +108,7 @@ jobs:
           # - arch: aarch64-unknown-linux-gnu
           #   os: ubuntu-latest
           #   file: surreal-${{ github.ref_name }}.linux-arm64
-          # - arch: x86_64-pc-windows-gnu
-          #   os: windows-latest
-          #   file: surreal-${{ github.ref_name }}.windows-amd64
-          - arch: x86_64-pc-windows-msvc
+          - arch: x86_64-pc-windows-gnu
             os: windows-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
 
@@ -151,6 +148,23 @@ jobs:
           sudo apt-get -y update
           sudo apt-get -y install musl-tools qemu-user libc6-dev-arm64-cross
           sudo apt-get -y install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
+
+      - name: Setup msys2 toolchains
+        if: ${{ contains(matrix.os, 'windows') }}
+        uses: msys2/setup-msys2@v2
+        with:
+          release: false
+          install: mingw-w64-x86_64-gcc mingw-w64-i686-gcc
+
+      - name: Prepare env for windows
+        if: ${{ contains(matrix.os, 'windows') }}
+        run: |
+          # Add symlinks to the target-specific GNU sysroots for Clang
+          New-Item -Path "C:\Program Files\LLVM\x86_64-w64-mingw32" -ItemType SymbolicLink -Value "C:\msys64\mingw64\x86_64-w64-mingw32"
+          # Add paths to GCC executables to PATH
+          echo "C:\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          # Configure CC_<target> environment variables
+          echo "CC_x86_64_pc_windows_gnu=x86_64-w64-mingw32-gcc" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
