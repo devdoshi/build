@@ -135,8 +135,8 @@ jobs:
         run: |
           sudo apt-get -y update
           sudo apt-get -y install mingw-w64
+          sudo apt-get -y install musl-tools qemu-user libc6-dev-arm64-cross
           sudo apt-get -y install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
-        # sudo apt-get -y install musl-tools qemu-user libc6-dev-arm64-cross
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
@@ -154,35 +154,35 @@ jobs:
           command: build
           args: --release --locked --target ${{ matrix.arch }}
 
-      - name: Configure AWS
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-region: us-east-2
-          aws-access-key-id: ${{ secrets.AMAZON_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AMAZON_SECRET_KEY }}
+      # - name: Configure AWS
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-region: us-east-2
+      #     aws-access-key-id: ${{ secrets.AMAZON_ACCESS_KEY }}
+      #     aws-secret-access-key: ${{ secrets.AMAZON_SECRET_KEY }}
 
-      - name: Package binaries
-        if: ${{ !contains(matrix.arch, 'windows') }}
-        shell: bash
-        run: |
-          cd target/${{ matrix.arch }}/release
-          chmod +x surreal
-          tar -zcvf ${{ matrix.file }}.tgz surreal
-          echo $(shasum -a 256 ${{ matrix.file }}.tgz | cut -f1 -d' ') > ${{ matrix.file }}.txt
-          aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.tgz s3://download.surrealdb.com/${{ github.ref_name }}/
-          aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.txt s3://download.surrealdb.com/${{ github.ref_name }}/
-          cd -
+      # - name: Package binaries
+      #   if: ${{ !contains(matrix.arch, 'windows') }}
+      #   shell: bash
+      #   run: |
+      #     cd target/${{ matrix.arch }}/release
+      #     chmod +x surreal
+      #     tar -zcvf ${{ matrix.file }}.tgz surreal
+      #     echo $(shasum -a 256 ${{ matrix.file }}.tgz | cut -f1 -d' ') > ${{ matrix.file }}.txt
+      #     aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.tgz s3://download.surrealdb.com/${{ github.ref_name }}/
+      #     aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.txt s3://download.surrealdb.com/${{ github.ref_name }}/
+      #     cd -
 
-      - name: Package binaries
-        if: ${{ contains(matrix.arch, 'windows') }}
-        shell: bash
-        run: |
-          cd target/${{ matrix.arch }}/release
-          cp surreal.exe ${{ matrix.file }}.exe
-          echo $(shasum -a 256 ${{ matrix.file }}.exe | cut -f1 -d' ') > ${{ matrix.file }}.txt
-          aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.exe s3://download.surrealdb.com/${{ github.ref_name }}/
-          aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.txt s3://download.surrealdb.com/${{ github.ref_name }}/
-          cd -
+      # - name: Package binaries
+      #   if: ${{ contains(matrix.arch, 'windows') }}
+      #   shell: bash
+      #   run: |
+      #     cd target/${{ matrix.arch }}/release
+      #     cp surreal.exe ${{ matrix.file }}.exe
+      #     echo $(shasum -a 256 ${{ matrix.file }}.exe | cut -f1 -d' ') > ${{ matrix.file }}.txt
+      #     aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.exe s3://download.surrealdb.com/${{ github.ref_name }}/
+      #     aws s3 cp --cache-control 'no-store' ${{ matrix.file }}.txt s3://download.surrealdb.com/${{ github.ref_name }}/
+      #     cd -
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
