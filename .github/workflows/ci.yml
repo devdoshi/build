@@ -102,15 +102,19 @@ jobs:
           # - arch: aarch64-apple-darwin
           #   os: macos-latest
           #   file: surreal-${{ github.ref_name }}.darwin-arm64
-          - arch: x86_64-unknown-linux-gnu
-            os: ubuntu-latest
-            file: surreal-${{ github.ref_name }}.linux-amd64
-          - arch: aarch64-unknown-linux-gnu
-            os: ubuntu-latest
-            file: surreal-${{ github.ref_name }}.linux-arm64
+          # - arch: x86_64-unknown-linux-gnu
+          #   os: ubuntu-latest
+          #   file: surreal-${{ github.ref_name }}.linux-amd64
+          # - arch: aarch64-unknown-linux-gnu
+          #   os: ubuntu-latest
+          #   file: surreal-${{ github.ref_name }}.linux-arm64
           - arch: x86_64-pc-windows-gnu
-            os: ubuntu-latest
+            os: windows-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
+          - arch: x86_64-pc-windows-msvc
+            os: windows-latest
+            file: surreal-${{ github.ref_name }}.windows-amd64
+
     runs-on: ${{ matrix.os }}
     steps:
 
@@ -130,11 +134,21 @@ jobs:
             target/
           key: ${{ matrix.arch }}-build-cargo-${{ hashFiles('**/Cargo.lock') }}
 
+      # - name: Set environment path
+      #   if: ${{ contains(matrix.os, 'windows') }}
+      #   run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
+
+      # - name: Install dependencies
+      #   if: ${{ contains(matrix.os, 'windows') }}
+      #   uses: msys2/setup-msys2@v2
+      #   with:
+      #     release: false
+      #     install: mingw-w64-x86_64-gcc mingw-w64-i686-gcc
+
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'ubuntu') }}
         run: |
           sudo apt-get -y update
-          sudo apt-get -y install mingw-w64
           sudo apt-get -y install musl-tools qemu-user libc6-dev-arm64-cross
           sudo apt-get -y install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
 
@@ -145,8 +159,8 @@ jobs:
           override: true
           target: ${{ matrix.arch }}
 
-      - name: Output package versions
-        run: go version ; cargo version ; rustc --version ; cmake --version ; gcc --version ; g++ --version ; perl -v
+      # - name: Output package versions
+      #   run: go version ; cargo version ; rustc --version ; cmake --version ; gcc --version ; g++ --version ; perl -v
 
       - name: Run cargo build
         uses: actions-rs/cargo@v1
