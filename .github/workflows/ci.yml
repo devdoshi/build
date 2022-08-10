@@ -33,9 +33,11 @@ jobs:
         if: ${{ contains(matrix.os, 'windows') }}
         run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
       
-      # - name: Install dependencies
-      #   if: ${{ contains(matrix.os, 'windows') }}
-      #   run: pacman --noconfirm -S pkg-config mingw-w64-x86_64-cmake mingw-w64-x86_64-openssl
+      - name: Install dependencies
+        if: ${{ contains(matrix.os, 'windows') }}
+        run: |
+            choco install cmake yasm
+            pacman --noconfirm -S mingw-w64-cmake mingw-w64-binutils mingw-w64-yasm mingw-w64-x86_64-openssl
 
       - name: Checkout sources
         uses: actions/checkout@v2
