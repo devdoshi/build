@@ -17,6 +17,12 @@ jobs:
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
     steps:
+        
+      - run: echo $Env:Path
+      
+      - run: echo $Env:Path
+        env:
+          PATH: C:\msys64\usr\bin\;$GITHUB_PATH
 
       - name: Cache cargo assets
         uses: pat-s/always-upload-cache@v3.0.1
@@ -29,13 +35,10 @@ jobs:
             target/
           key: ${{ matrix.arch }}-build-cargo-test
           
-      - run: perl -V
+      - name: Install dependencies
+        if: ${{ contains(matrix.os, 'windows') }}
+        run: pacman -S perl openssl openssl-devel pkg-config
 
-      # - name: Install dependencies
-      #   if: ${{ contains(matrix.os, 'windows') }}
-      #   run: |
-      #     choco install --allow-empty-checksums strawberryperl
-                          
       - name: Checkout sources
         uses: actions/checkout@v2
         with:
@@ -50,6 +53,8 @@ jobs:
 
       - name: Run cargo build
         uses: actions-rs/cargo@v1
+        env:
+          PATH: C:\msys64\usr\bin\;$GITHUB_PATH
         with:
           command: build
           args: --release --locked --target ${{ matrix.arch }}
