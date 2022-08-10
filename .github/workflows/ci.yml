@@ -54,6 +54,9 @@ jobs:
 
       - name: Run cargo build
         uses: actions-rs/cargo@v1
+        env:
+          LIBCLANG_PATH: 'C:\Program Files\LLVM\bin'
+          RUSTFLAGS: ""
         with:
           command: build
           args: --release --locked --target ${{ matrix.arch }}
