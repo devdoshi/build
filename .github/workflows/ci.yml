@@ -40,7 +40,7 @@ jobs:
       
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
-        run: pacman --noconfirm -S mingw-w64-x86_64-yasm mingw-w64-clang-x86_64-clang mingw-w64-x86_64-binutils mingw-w64-x86_64-openssl
+        run: choco install -y llvm ; refreshenv
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
@@ -48,6 +48,9 @@ jobs:
           toolchain: stable
           override: true
           target: ${{ matrix.arch }}
+          
+      - name: Output package versions
+        run: go version ; cargo version ; cmake --version ; perl -V
 
       - name: Run cargo build
         uses: actions-rs/cargo@v1
