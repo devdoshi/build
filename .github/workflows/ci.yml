@@ -22,13 +22,13 @@ jobs:
         uses: pat-s/always-upload-cache@v3.0.1
         with:
           path: |
-            /vcpkg/packages
+            /vcpkg/
             ~/.cargo/bin/
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ matrix.arch }}-build-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ matrix.arch }}-build-cargo-
           
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
@@ -37,6 +37,10 @@ jobs:
           vcpkg install openssl:x64-windows-static
           vcpkg install openssl:x64-windows-static-md
           choco install --allow-empty-checksums pkgconfiglite
+          cd C:\vcpkg\installed
+          ls
+          cd C:\vcpkg\installed\x64-windows-static
+          ls
           cd C:\vcpkg\packages\openssl_x64-windows-static
           ls
           cd C:\vcpkg\packages\openssl_x64-windows-static\lib
@@ -62,7 +66,7 @@ jobs:
           VCPKGRS_DYNAMIC: 1
           OPENSSL_STATIC: true
           X86_64_PC_WINDOWS_GNU_OPENSSL_NO_VENDOR: true
-          X86_64_PC_WINDOWS_GNU_OPENSSL_DIR: C:\vcpkg\packages\openssl_x64-windows-static
+          X86_64_PC_WINDOWS_GNU_OPENSSL_DIR: C:\vcpkg\installed\x64-windows-static
           # X86_64_PC_WINDOWS_GNU_OPENSSL_LIB_DIR: C:\vcpkg\packages\openssl_x64-windows-static-md\lib
           # X86_64_PC_WINDOWS_GNU_OPENSSL_INCLUDE_DIR: C:\vcpkg\packages\openssl_x64-windows-static-md\include
         with:
