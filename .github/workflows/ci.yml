@@ -16,6 +16,9 @@ jobs:
             os: windows-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
+    env:
+      LIBCLANG_PATH: 'C:\Program Files\LLVM\bin'
+      RUSTFLAGS: ""
     steps:
 
       - name: Checkout sources
@@ -23,31 +26,42 @@ jobs:
         with:
           repository: 'surrealdb/surrealdb'
           
-      - name: Cache environment
-        uses: pat-s/always-upload-cache@v3.0.1
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ matrix.arch }}-build-cargo-test
-
-      - name: Set environment path
-        if: ${{ contains(matrix.os, 'windows') }}
-        run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
+      # - name: Cache environment
+      #   uses: pat-s/always-upload-cache@v3.0.1
+      #   with:
+      #     path: |
+      #       ~/.cargo/bin/
+      #       ~/.cargo/registry/index/
+      #       ~/.cargo/registry/cache/
+      #       ~/.cargo/git/db/
+      #       target/
+      #     key: ${{ matrix.arch }}-build-cargo-test
       
+      - name: test
+        run: |
+          cd C:\msys64\usr\bin
+          ls
+
+      # - name: Set environment path
+      #   if: ${{ contains(matrix.os, 'windows') }}
+      #   run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
+      
+      # - name: Install dependencies
+      #   if: ${{ contains(matrix.os, 'windows') }}
+      #   run: pacman --noconfirm -S mingw-w64-x86_64-abseil-cpp mingw-w64-x86_64-yasm mingw-w64-x86_64-cmake mingw-w64-x86_64-clang mingw-w64-x86_64-protobuf mingw-w64-x86_64-binutils
+
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
-        run: pacman --noconfirm -S mingw-w64-x86_64-yasm mingw-w64-x86_64-cmake mingw-w64-x86_64-clang mingw-w64-x86_64-protobuf mingw-w64-x86_64-binutils
+        run: choco install -y llvm
+        
+      - run: refreshenv
 
-      - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          target: ${{ matrix.arch }}
+      # - name: Install stable toolchain
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     toolchain: stable
+      #     override: true
+      #     target: ${{ matrix.arch }}
           
       - name: Output package versions
         run: go version ; cargo version ; rustc --version ; cmake --version ; gcc --version ; g++ --version ; perl -v
