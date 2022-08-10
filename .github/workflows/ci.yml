@@ -62,12 +62,11 @@ jobs:
       - name: Run cargo build
         uses: actions-rs/cargo@v1
         env:
-          VCPKGRS_DYNAMIC: 1
           OPENSSL_STATIC: true
-          X86_64_PC_WINDOWS_GNU_OPENSSL_NO_VENDOR: true
-          X86_64_PC_WINDOWS_GNU_OPENSSL_DIR: C:\vcpkg\installed\x64-windows-static
-          # X86_64_PC_WINDOWS_GNU_OPENSSL_LIB_DIR: C:\vcpkg\packages\openssl_x64-windows-static-md\lib
-          # X86_64_PC_WINDOWS_GNU_OPENSSL_INCLUDE_DIR: C:\vcpkg\packages\openssl_x64-windows-static-md\include
+          OPENSSL_NO_VENDOR: true
+          OPENSSL_DIR: C:\vcpkg\installed\x64-windows-static
+          OPENSSL_LIB_DIR: C:\vcpkg\installed\x64-windows-static\lib
+          OPENSSL_INCLUDE_DIR: C:\vcpkg\installed\x64-windows-static\include
         with:
           command: build
           args: --release --locked --target ${{ matrix.arch }}
