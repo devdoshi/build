@@ -22,7 +22,21 @@ jobs:
       
       - run: echo $Env:Path
         env:
-          PATH: C:\msys64\usr\bin\;$GITHUB_PATH
+          PATH: C:\msys64\usr\bin\;${GITHUB_PATH}
+    
+      - run: echo $Env:Path
+        env:
+          PATH: C:\msys64\usr\bin\;$Env.Path
+          
+      - run: echo $Env:Path
+        env:
+          PATH: C:\msys64\usr\bin\;${Env.Path}
+
+      - run: echo "C:\msys64\usr\bin;${Env.Path}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
+      
+      - run: echo $Env:Path
+        env:
+          PATH: C:\msys64\usr\bin\;${Env.Path}
 
       - name: Cache cargo assets
         uses: pat-s/always-upload-cache@v3.0.1
@@ -37,7 +51,7 @@ jobs:
           
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
-        run: pacman -S perl openssl openssl-devel pkg-config
+        run: pacman -S perl
 
       - name: Checkout sources
         uses: actions/checkout@v2
