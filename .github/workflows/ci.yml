@@ -40,7 +40,7 @@ jobs:
       
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
-        run: pacman --noconfirm -S cmake binutils yasm mingw-w64-x86_64-openssl
+        run: pacman --noconfirm -S binutils yasm mingw-w64-x86_64-cmake mingw-w64-x86_64-openssl
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
