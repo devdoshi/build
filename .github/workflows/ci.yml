@@ -37,7 +37,7 @@ jobs:
           
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
-        run: pacman -S perl
+        run: pacman --noconfirm -S openssl openssl-devel pkg-config
 
       - name: Checkout sources
         uses: actions/checkout@v2
