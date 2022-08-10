@@ -17,14 +17,8 @@ jobs:
             file: surreal-${{ github.ref_name }}.windows-amd64
     runs-on: ${{ matrix.os }}
     steps:
-        
-      - run: echo $Env:Path
-
-      - run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
-      
-      - run: echo $Env:Path
-      
-      - name: Cache cargo assets
+                    
+      - name: Cache environment
         uses: pat-s/always-upload-cache@v3.0.1
         with:
           path: |
@@ -34,10 +28,14 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ matrix.arch }}-build-cargo-test
-          
+
+      - name: Set environment path
+        if: ${{ contains(matrix.os, 'windows') }}
+        run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
+      
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
-        run: pacman --noconfirm -S openssl openssl-devel pkg-config
+        run: pacman --noconfirm -S pkg-config mingw-w64-x86_64-grpc mingw-w64-x86_64-openssl
 
       - name: Checkout sources
         uses: actions/checkout@v2
@@ -53,8 +51,6 @@ jobs:
 
       - name: Run cargo build
         uses: actions-rs/cargo@v1
-        env:
-          PATH: C:\msys64\usr\bin\;$GITHUB_PATH
         with:
           command: build
           args: --release --locked --target ${{ matrix.arch }}
