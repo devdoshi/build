@@ -40,7 +40,7 @@ jobs:
       
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'windows') }}
-        run: choco install -y llvm ; refreshenv
+        run: pacman --noconfirm -S mingw-w64-x86_64-yasm mingw-w64-clang-x86_64-clang mingw-w64-x86_64-binutils
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
@@ -50,13 +50,10 @@ jobs:
           target: ${{ matrix.arch }}
           
       - name: Output package versions
-        run: go version ; cargo version ; cmake --version ; perl -V
+        run: go version ; cargo version ; cmake --version ; perl -v
 
       - name: Run cargo build
         uses: actions-rs/cargo@v1
-        env:
-          LIBCLANG_PATH: 'C:\Program Files\LLVM\bin'
-          RUSTFLAGS: ""
         with:
           command: build
           args: --release --locked --target ${{ matrix.arch }}
