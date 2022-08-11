@@ -140,7 +140,7 @@ jobs:
       - name: Install dependencies
         if: contains(matrix.arch, 'windows') && endsWith(matrix.arch, '-msvc')
         run: |
-          choco install openssl
+          choco install --no-progress nasm openssl
 
       - name: Install dependencies
         if: contains(matrix.arch, 'ubuntu') && endsWith(matrix.arch, '-gnu')
