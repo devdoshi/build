@@ -139,7 +139,9 @@ jobs:
 
       - name: Install dependencies
         if: contains(matrix.arch, 'windows') && endsWith(matrix.arch, '-msvc')
-        run: choco install -y --force llvm openssl
+        run: |
+          vcpkg integrate install
+          vcpkg install openssl:x64-windows-static
 
       - name: Install dependencies
         if: contains(matrix.arch, 'ubuntu') && endsWith(matrix.arch, '-gnu')
@@ -164,8 +166,11 @@ jobs:
           command: build
           args: --release --locked --target ${{ matrix.arch }}
         env:
+          VCPKGRS_DYNAMIC: 1
           LIBCLANG_PATH: 'C:\Program Files\LLVM\bin'
-          RUSTFLAGS: ""
+          OPENSSL_DIR: C:\vcpkg\installed\x64-windows-static
+          OPENSSL_LIB_DIR: C:\vcpkg\installed\x64-windows-static\lib
+          OPENSSL_INCLUDE_DIR: C:\vcpkg\installed\x64-windows-static\include
 
       # - name: Configure AWS
       #   uses: aws-actions/configure-aws-credentials@v1
