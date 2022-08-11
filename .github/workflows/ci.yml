@@ -108,7 +108,10 @@ jobs:
           # - arch: aarch64-unknown-linux-gnu
           #   os: ubuntu-latest
           #   file: surreal-${{ github.ref_name }}.linux-arm64
-          - arch: x86_64-pc-windows-gnu
+          # - arch: x86_64-pc-windows-gnu
+          #   os: windows-latest
+          #   file: surreal-${{ github.ref_name }}.windows-amd64
+          - arch: x86_64-pc-windows-msvc
             os: windows-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
 
@@ -129,9 +132,9 @@ jobs:
             target/
           key: ${{ matrix.arch }}-build-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Prepare environment
-        if: ${{ contains(matrix.os, 'windows') }}
-        run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
+      # - name: Prepare environment
+      #   if: ${{ contains(matrix.os, 'windows') }}
+      #   run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
 
       - name: Install dependencies
         if: ${{ contains(matrix.os, 'ubuntu') }}
