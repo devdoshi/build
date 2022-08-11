@@ -112,9 +112,9 @@ checksum = "70033777eb8b5124a81a1889416543dddef2de240019b674c81285a2635a7e1e"
 
 [[package]]
 name = "anyhow"
-version = "1.0.60"
+version = "1.0.61"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c794e162a5eff65c72ef524dfe393eb923c354e350bb78b9c7383df13f3bc142"
+checksum = "508b352bb5c066aac251f6daf6b36eccd03e8a88e8081cd44959ea277a3af9a8"
 
 [[package]]
 name = "approx"
@@ -3619,6 +3619,7 @@ dependencies = [
 [[package]]
 name = "tikv-client"
 version = "0.1.0"
+source = "git+https://github.com/tikv/client-rust#027a7dffd1d652679ab51ac5dd6e1e1005ea463e"
 dependencies = [
  "async-recursion 0.3.2",
  "async-trait",
@@ -3649,6 +3650,7 @@ dependencies = [
 [[package]]
 name = "tikv-client-common"
 version = "0.1.0"
+source = "git+https://github.com/tikv/client-rust#027a7dffd1d652679ab51ac5dd6e1e1005ea463e"
 dependencies = [
  "futures 0.3.21",
  "grpcio",
@@ -3664,6 +3666,7 @@ dependencies = [
 [[package]]
 name = "tikv-client-pd"
 version = "0.1.0"
+source = "git+https://github.com/tikv/client-rust#027a7dffd1d652679ab51ac5dd6e1e1005ea463e"
 dependencies = [
  "async-trait",
  "futures 0.3.21",
@@ -3676,6 +3679,7 @@ dependencies = [
 [[package]]
 name = "tikv-client-proto"
 version = "0.1.0"
+source = "git+https://github.com/tikv/client-rust#027a7dffd1d652679ab51ac5dd6e1e1005ea463e"
 dependencies = [
  "futures 0.3.21",
  "grpcio",
@@ -3689,6 +3693,7 @@ dependencies = [
 [[package]]
 name = "tikv-client-store"
 version = "0.1.0"
+source = "git+https://github.com/tikv/client-rust#027a7dffd1d652679ab51ac5dd6e1e1005ea463e"
 dependencies = [
  "async-trait",
  "derive-new",
