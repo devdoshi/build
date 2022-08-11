@@ -1,0 +1,12 @@
+blank_lines_lower_bound = 1
+edition = "2021"
+hard_tabs = true
+indent_style = "Block"
+match_arm_blocks = true
+merge_derives = true
+reorder_impl_items = true
+reorder_imports = true
+reorder_modules = true
+use_field_init_shorthand = true
+use_small_heuristics = "Off"
+wrap_comments = true
