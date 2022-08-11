@@ -134,13 +134,19 @@ jobs:
           key: ${{ matrix.arch }}-build-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Prepare environment
-        if: contains(matrix.arch, 'windows') && endsWith(matrix.arch, '-gnu')
+        if: contains(matrix.arch, 'windows')
         run: echo "C:\msys64\usr\bin;$Env:Path" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
 
       - name: Install dependencies
         if: contains(matrix.arch, 'windows') && endsWith(matrix.arch, '-msvc')
         run: |
           choco install --no-progress nasm openssl
+          pacman --noconfirm -S nasm yasm openssl
+
+      - name: Install dependencies
+        if: contains(matrix.arch, 'windows') && endsWith(matrix.arch, '-gnu')
+        run: |
+          pacman --noconfirm -S mingw-w64-x86_64-yasm mingw-w64-x86_64-cmake mingw-w64-x86_64-clang mingw-w64-x86_64-openssl
 
       - name: Install dependencies
         if: contains(matrix.arch, 'ubuntu') && endsWith(matrix.arch, '-gnu')
