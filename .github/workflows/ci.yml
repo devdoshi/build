@@ -111,8 +111,11 @@ jobs:
           # - arch: x86_64-pc-windows-gnu
           #   os: windows-latest
           #   file: surreal-${{ github.ref_name }}.windows-amd64
-          - arch: x86_64-pc-windows-msvc
-            os: windows-latest
+          # - arch: x86_64-pc-windows-msvc
+          #   os: windows-latest
+          #   file: surreal-${{ github.ref_name }}.windows-amd64
+          - arch: x86_64-pc-windows-gnu
+            os: ubuntu-latest
             file: surreal-${{ github.ref_name }}.windows-amd64
 
     runs-on: ${{ matrix.os }}
@@ -141,7 +144,7 @@ jobs:
         run: |
           sudo apt-get -y update
           sudo apt-get -y install musl-tools qemu-user libc6-dev-arm64-cross
-          sudo apt-get -y install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
+          sudo apt-get -y install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu mingw-w64
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
