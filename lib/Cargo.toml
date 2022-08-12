@@ -14,7 +14,7 @@ categories = ["database-implementations", "data-structures", "embedded"]
 license = "Apache-2.0"
 
 [features]
-default = ["parallel", "kv-tikv", "kv-echodb", "kv-yokudb", "http"]
+default = ["parallel", "kv-tikv", "kv-echodb", "kv-yokudb", "scripting", "http"]
 parallel = ["dep:executor"]
 kv-tikv = ["dep:tikv"]
 kv-echodb = ["dep:echodb"]
